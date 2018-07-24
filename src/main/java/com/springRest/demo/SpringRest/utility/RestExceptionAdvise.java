@@ -1,12 +1,9 @@
 package com.springRest.demo.SpringRest.utility;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -14,9 +11,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -67,10 +64,22 @@ public class RestExceptionAdvise extends ResponseEntityExceptionHandler {
 
 		final ApiError errorDetails = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error, new Date());
 		return new ResponseEntity<Object>(errorDetails, errorDetails.getStatus());
-		// new ResponseEntity<>(ex, errorDetails, headers, errorDetails.getStatus(),
-		// request);
-		// handleExceptionInternal(ex, errorDetails, headers, errorDetails.getStatus(),
-		// request);
+	}
+
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		logger.info(ex.getClass().getName());
+		logger.info(ex.getRootCause());
+
+		final String error = "Enter integer value arays, not STRING";
+
+		final ApiError errorDetails = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error, new Date());
+		return new ResponseEntity<Object>(errorDetails, errorDetails.getStatus());
+	}
+
+	@Override
+	public String toString() {
+		return super.toString();
 	}
 
 }

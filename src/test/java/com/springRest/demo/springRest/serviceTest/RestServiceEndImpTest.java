@@ -1,4 +1,4 @@
-package com.springRest.demo.springRest.Assignment.serviceTest;
+package com.springRest.demo.springRest.serviceTest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
